@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tic Tac Toe | Developed by Thangapandi</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,Helvetica,sans-serif;
+}
+body{
+    background:linear-gradient(135deg,#0f172a,#1e293b);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+    color:#fff;
+}
+.container{
+    text-align:center;
+}
+h1{
+    margin-bottom:10px;
+}
+.credit{
+    color:#94a3b8;
+    margin-bottom:20px;
+}
+.status{
+    font-size:20px;
+    margin-bottom:20px;
+    font-weight:bold;
+}
+.board{
+    display:grid;
+    grid-template-columns:repeat(3,110px);
+    gap:10px;
+    justify-content:center;
+}
+.cell{
+    width:110px;
+    height:110px;
+    background:#1e293b;
+    border:2px solid #38bdf8;
+    border-radius:12px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:48px;
+    font-weight:bold;
+    cursor:pointer;
+    transition:.3s;
+}
+.cell:hover{
+    background:#334155;
+}
+button{
+    margin-top:20px;
+    padding:12px 30px;
+    border:none;
+    border-radius:8px;
+    background:#38bdf8;
+    color:#000;
+    font-size:18px;
+    font-weight:bold;
+    cursor:pointer;
+}
+button:hover{
+    background:#0ea5e9;
+}
+.footer{
+    margin-top:15px;
+    color:#cbd5e1;
+    font-size:14px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>🎮 Tic Tac Toe</h1>
+    <div class="credit">Developed by <b>Thangapandi</b></div>
+
+    <div class="status" id="status">Player X Turn</div>
+
+    <div class="board" id="board">
+        <div class="cell" data-index="0"></div>
+        <div class="cell" data-index="1"></div>
+        <div class="cell" data-index="2"></div>
+        <div class="cell" data-index="3"></div>
+        <div class="cell" data-index="4"></div>
+        <div class="cell" data-index="5"></div>
+        <div class="cell" data-index="6"></div>
+        <div class="cell" data-index="7"></div>
+        <div class="cell" data-index="8"></div>
+    </div>
+
+    <button onclick="restartGame()">Restart Game</button>
+
+    <div class="footer">
+        HTML • CSS • JavaScript (Single File)
+    </div>
+</div>
+
+<script>
+const cells=document.querySelectorAll(".cell");
+const statusText=document.getElementById("status");
+
+let board=["","","","","","","","",""];
+let currentPlayer="X";
+let running=true;
+
+const winPatterns=[
+[0,1,2],
+[3,4,5],
+[6,7,8],
+[0,3,6],
+[1,4,7],
+[2,5,8],
+[0,4,8],
+[2,4,6]
+];
+
+cells.forEach(cell=>cell.addEventListener("click",cellClicked));
+
+function cellClicked(){
+    const index=this.dataset.index;
+
+    if(board[index]!="" || !running)
+        return;
+
+    board[index]=currentPlayer;
+    this.textContent=currentPlayer;
+
+    checkWinner();
+}
+
+function checkWinner(){
+
+    let won=false;
+
+    for(let pattern of winPatterns){
+        const a=board[pattern[0]];
+        const b=board[pattern[1]];
+        const c=board[pattern[2]];
+
+        if(a==""||b==""||c=="")
+            continue;
+
+        if(a===b && b===c){
+            won=true;
+            break;
+        }
+    }
+
+    if(won){
+        statusText.textContent="🎉 Player "+currentPlayer+" Wins!";
+        running=false;
+        return;
+    }
+
+    if(!board.includes("")){
+        statusText.textContent="🤝 Match Draw!";
+        running=false;
+        return;
+    }
+
+    currentPlayer=currentPlayer==="X"?"O":"X";
+    statusText.textContent="Player "+currentPlayer+" Turn";
+}
+
+function restartGame(){
+    board=["","","","","","","","",""];
+    currentPlayer="X";
+    running=true;
+    statusText.textContent="Player X Turn";
+
+    cells.forEach(cell=>{
+        cell.textContent="";
+    });
+}
+</script>
+
+</body>
+</html>
